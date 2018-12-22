@@ -2,11 +2,11 @@
   "name": "server",
   "version": "1.0.0",
   "description": "graphQL node server",
-  "main": "server.js",
+  "main": "index.js",
   "author": "Joao Tavares",
   "license": "MIT",
   "scripts": {
-    "start": "node server.js"
+    "start": "node index.js"
   },
   "engines": {
     "node": "10.3.0"
