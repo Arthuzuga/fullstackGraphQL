@@ -6,7 +6,7 @@
   "author": "Joao Tavares",
   "license": "MIT",
   "scripts": {
-    "dev:server": "node server.js"
+    "start": "node server.js"
   },
   "dependencies": {
     "express": "^4.16.4",
