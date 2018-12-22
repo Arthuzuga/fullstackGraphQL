@@ -6,7 +6,7 @@
   "author": "Joao Tavares",
   "license": "MIT",
   "scripts": {
-    "dev:server": "nodemon server.js"
+    "dev:server": "node server.js"
   },
   "dependencies": {
     "express": "^4.16.4",
