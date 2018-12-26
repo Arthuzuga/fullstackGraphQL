@@ -1,6 +1,7 @@
 const graphql = require('graphql');
-const Book = require('../models/book');
-const Author = require('../models/author');
+const _ = require('lodash');
+const Book = require('../models/mongoDB/book');
+const Author = require('../models/mongoDB/author');
 
 const {
     GraphQLObjectType,
@@ -132,6 +133,56 @@ const mutation = new GraphQLObjectType({
                 return author.save();
             }
         },
+        updateAuthor: {
+            type: AuthorType,
+            args: {
+                id: {
+                    type: new GraphQLNonNull(GraphQLID),
+                },
+                name: {
+                    type: GraphQLString,
+                },
+                age: {
+                    type: GraphQLInt,
+                },
+            },
+            resolve(parentValue, args) {
+                if (args.name)
+                    Author.updateOne(Author.findById(args.id), {
+                        $set: {
+                            name: args.name
+                        }
+                    }, (err, obj) => {
+                        if (err) throw err;
+                        console.log("Author's name was edited");
+                    })
+                if (args.age)
+                    Author.updateOne(Author.findById(args.id), {
+                        $set: {
+                            age: args.age
+                        }
+                    }, (err, obj) => {
+                        if (err) throw err;
+                        console.log("Author's age was edited");
+                    })
+                return Author.findById(args.id);
+            }
+        },
+        deleteAuthor: {
+            type: AuthorType,
+            args: {
+                id: {
+                    type: new GraphQLNonNull(GraphQLID)
+                },
+            },
+            resolve(parentValue, args) {
+                Author.deleteOne(Author.findById(args.id), (err, obj) => {
+                    if (err) throw err;
+                    console.log("Author deleted, id: ", args.id);
+                });
+                return Author.find({});
+            }
+        },
         addBook: {
             type: BookType,
             args: {
@@ -152,6 +203,57 @@ const mutation = new GraphQLObjectType({
                     authorId: args.authorId,
                 });
                 return book.save();
+            }
+        },
+        deleteBook: {
+            type: BookType,
+            args: {
+                id: {
+                    type: new GraphQLNonNull(GraphQLID)
+                },
+            },
+            resolve(parentValue, args) {
+                Book.deleteOne(Book.findById(args.id), (err, obj) => {
+                    if (err) throw err;
+                    console.log("Book deleted, id: ", args.id);
+                });
+
+                return Book.find({});
+            }
+        },
+        updateBook: {
+            type: BookType,
+            args: {
+                id: {
+                    type: new GraphQLNonNull(GraphQLID),
+                },
+                name: {
+                    type: GraphQLString,
+                },
+                genre: {
+                    type: GraphQLString,
+                },
+            },
+            resolve(parentValue, args) {
+                if (args.name)
+                    Book.updateOne(Book.findById(args.id), {
+                        $set: {
+                            name: args.name
+                        }
+                    }, (err, obj) => {
+                        if (err) throw err;
+                        console.log("Book's name was edited");
+                    })
+                if (args.genre)
+                    Book.updateOne(Book.findById(args.id), {
+                        $set: {
+                            genre: args.genre
+                        }
+                    }, (err, obj) => {
+                        if (err) throw err;
+                        console.log("Book's genre was edited");
+                    })
+                return Book.findById(args.id);
             }
         }
     }
